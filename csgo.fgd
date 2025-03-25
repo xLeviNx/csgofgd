@@ -56,7 +56,53 @@
 //--------------------------------------------------------------------------------------------------
 
 //Exclude this since we want to remove some defunct parameters. Only way to do this currently is to exclude and redefine
-@exclude env_sky
+@exclude env_sky 
+@exclude func_illusionary
+@exclude light_dynamic
+@exclude beam_spotlight
+@exclude color_correction
+@exclude env_beam
+@exclude env_beverage
+@exclude env_cubemap
+@exclude env_funnel
+@exclude env_instructor_vr_hint
+@exclude env_laser
+@exclude env_lightglow
+@exclude env_projectedtexture
+@exclude env_rotorshooter
+@exclude env_rotorwash_emitter
+@exclude env_screenoverlay
+@exclude env_smokestack
+@exclude env_smoketrail
+@exclude env_sprite
+@exclude env_splash
+@exclude env_sprite_oriented
+@exclude env_sun
+@exclude env_texturetoggle
+@exclude env_tonemap_controller
+@exclude env_volumetric_fog_controller
+@exclude env_volumetric_fog_volume
+@exclude env_wind_clientside
+@exclude func_fish_pool
+@exclude func_instance
+@exclude func_orator
+@exclude haptic_relay
+@exclude info_ladder_dismount
+@exclude info_landmark
+@exclude info_lighting
+@exclude info_world_layer
+@exclude postprocess_controller
+@exclude color_correction_volume
+@exclude env_bubbles
+@exclude fog_volume
+@exclude func_detail_blocker
+@exclude func_precipitation
+@exclude func_precipitation_blocker
+@exclude func_reflective_glass
+@exclude func_shatterglass
+@exclude func_wall
+@exclude func_wall_toggle
+@exclude trigger_tonemap
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
@@ -101,8 +147,6 @@
 @SolidClass base(worldbase) = worldspawn : 
 	"This is the world entity. Each map can only contain one, and it's automatically created for you."
 [
-	baked_light_index_min(integer) : "Baked Light Minimum Index" : "0" : "Baked lights in this map will not have a value smaller than this number. Use to avoid conflicts in dynamically loaded prefabs."
-	baked_light_index_max(integer) : "Baked Light Maximum Index" : "256" : "Baked lights in this map will not have a value equal to or larger than this number. Use to avoid conflicts in dynamically loaded prefabs."
 	max_lightmap_resolution(choices) : "Maximum Lightmap Resolution" : "0" =
 	[
 		"0" : "No Maximum"
@@ -114,6 +158,44 @@
 		"16384" : "16384"
 	]
 	lightmap_queries(boolean) : "Lightmap Queries" : "1" : "Generates data which can be used to lookup lightmap UVs at a given position, useful for high-fidelity illumination of bullet decals on lightmapped geometry."
+
+	steamaudio_reverb_rebake_option(choices) [ group="Steam Audio Reverb Settings" ]: "Rebake Option" : "1" : "<b>Cleanup</b>: Reverb bake is disabled. Baked data will be cleaned up during map compile in Hammer or mapbuilder.<br /><b>Manual</b>: Reverb needs to be baked manually. Baked data is added or updated during map compile in Hammer but untouched by mapbuilder.<br /><b>Auto</b>: Reverb is baked automatically during map compile. Baked data is added or updated during map compile in Hammer or mapbuilder." =
+	[
+		"0" : "Cleanup"
+		"1" : "Manual"
+		"2" : "Auto"
+	]
+	steamaudio_reverb_grid_type(choices) [ group="Steam Audio Reverb Settings" ]: "Grid Type" : "0" : "<b>Uniform Floor</b>: Places probes at a specified height above the floor with a specified horizontal spacing between probes. <br /><b>Manual Grid</b>: Use manually generated probes in the map.<br /><b>NavMesh Grid</b>: Places probes at a specified height above the NavMesh with a specified horizontal spacing between probes." =
+	[
+		"0" : "Uniform Floor"
+		"1" : "Manual Grid"
+		"2" : "NavMesh Grid"
+	]
+	steamaudio_reverb_grid_spacing(float) [ group="Steam Audio Reverb Settings" ]: "Grid Spacing" : "6" : "The horizontal distance (in meters) between adjacent probes."
+	steamaudio_reverb_height_above_floor(float) [ group="Steam Audio Reverb Settings" ]: "Height Above Floor" : "1.5" : "The height (in meters) above the floor at which probes should be placed.."
+	steamaudio_reverb_rays(integer) [ group="Steam Audio Reverb Settings" ]: "Baking Rays" : "32768" : "The number of rays traced from the listener when baking reflections or reverb. Increasing this value results in more accurate reflections, at the cost of increased bake times."
+	steamaudio_reverb_bounces(integer) [ group="Steam Audio Reverb Settings" ]: "Baking Bounces" : "32" : "The number of times each ray traced from the listener is reflected when baking reflections or reverb. Increasing this value results in longer, more accurate reverb tails, at the cost of increased bake times."
+	steamaudio_reverb_ir_duration(float) [ group="Steam Audio Reverb Settings" ]: "Baking Duration" : "1.0" : "The duration (in seconds) of the IRs generated when baking reflections or reverb. Increasing this value results in longer, more accurate reverb tails, at the cost of increased disk space usage."
+	steamaudio_reverb_ambisonic_order(integer) [ group="Steam Audio Reverb Settings" ]: "Baking Ambisonic Order" : "1" : "The Ambisonic order of the IRs generated when baking reflections or reverb. Increasing this value results in more accurate directional variation of reflected sound, at the cost of increased disk space usage."
+
+	steamaudio_pathing_rebake_option(choices) [ group="Steam Audio Pathing Settings" ]: "Rebake Option" : "1" : "<b>Cleanup</b>: Pathing bake is disabled. Baked data will be cleaned up during map compile in Hammer or mapbuilder.<br /><b>Manual</b>: Pathing needs to be baked manually. Baked data is added or updated during map compile in Hammer but untouched by mapbuilder.<br /><b>Auto</b>: Pathing is baked automatically during map compile. Baked data is added or updated during map compile in Hammer or mapbuilder." =
+	[
+		"0" : "Cleanup"
+		"1" : "Manual"
+		"2" : "Auto"
+	]
+	steamaudio_pathing_grid_type(choices) [ group="Steam Audio Pathing Settings" ]: "Grid Type" : "0" : "<b>Uniform Floor</b>: Places probes at a specified height above the floor with a specified horizontal spacing between probes. <br /><b>Manual Grid</b>: Use manually generated probes in the map.<br /><b>NavMesh Grid</b>: Places probes at a specified height above the NavMesh with a specified horizontal spacing between probes." =
+	[
+		"0" : "Uniform Floor"
+		"1" : "Manual Grid"
+		"2" : "NavMesh Grid"
+	]
+	steamaudio_pathing_grid_spacing(float) [ group="Steam Audio Pathing Settings" ]: "Grid Spacing" : "6" : "The horizontal distance (in meters) between adjacent probes."
+	steamaudio_pathing_height_above_floor(float) [ group="Steam Audio Pathing Settings" ]: "Height Above Floor" : "1.5" : "The height (in meters) above the floor at which probes should be placed.."
+	steamaudio_pathing_visibility_samples(integer) [ group="Steam Audio Pathing Settings" ]: "Baking Visibilty Samples" : "1" : "Number of point samples to use around each probe when testing whether one probe can see another. To determine if two probes are mutually visible, rays are traced from each point sample of the first probe, to every other point sample of the second probe. Increasing this value prevents paths from being considered occluded by small objects, at the cost of increased bake times."
+	steamaudio_pathing_visibility_radius(float) [ group="Steam Audio Pathing Settings" ]: "Baking Visibility Radius" : "0.0" : "When testing for mutual visibility between a pair of probes, each probe is treated as a sphere of this radius (in meters), and point samples are generated within this sphere."
+	steamaudio_pathing_visibility_threshold(float) [ group="Steam Audio Pathing Settings" ]: "Baking Visibility Threshold" : "0.1" : "When tracing rays to test for mutual visibility between a pair of probes, the fraction of rays that are unoccluded must be greater than this threshold for the pair of probes to be considered mutually visible."
+	steamaudio_pathing_visibility_pathrange(float) [ group="Steam Audio Pathing Settings" ]: "Baking Path Range" : "100.0" : "If the distance (in meters) between two probes is greater than this value, the probes are considered to not have any path between them. Increasing this value allows sound to propagate over greater distances, at the cost of increased bake times and memory usage."
 ]
 
 @BaseClass = Angles
@@ -349,7 +431,7 @@
 	input HideHudHint(void) : "Hides the hint message."
 ]
 
-@PointClass base(Targetname, Angles) studio("characters/models/ctm_sas/ctm_sas.vmdl")
+@PointClass base(Targetname, Angles) tags( PlayerPosition )studio("characters/models/shared/spawn/ctm_spawnpoint.vmdl")
 	metadata
 	{
 	entity_tool_name = "Counter Terrorist Spawn Point"
@@ -370,7 +452,7 @@
 ]
 
 
-@PointClass base(Targetname, Angles) studio("characters/models/tm_phoenix/tm_phoenix.vmdl") 
+@PointClass base(Targetname, Angles) tags( PlayerPosition ) studio("characters/models/shared/spawn/tm_spawnpoint.vmdl") 
 	metadata
 	{
 	entity_tool_name = "Terrorist Spawn Point"
@@ -492,6 +574,10 @@
 	PatrolArea14(target_destination) : "PatrolArea[14]"
 	PatrolArea15(target_destination) : "PatrolArea[15]"
 	PatrolArea16(target_destination) : "PatrolArea[16]"
+]
+
+@PointClass studio("models/chicken/chicken.vmdl") = chicken
+[
 ]
 
 @PointClass base(Targetname, Angles) studio("models/hostage/hostage.vmdl") = hostage_entity :
@@ -747,43 +833,52 @@
 	
 	// These are controlled instead by ConVars in settings in CSGO that vary based on global shadow settings, 
 	// so don't expose it to artists since it won't work
+	nearclipplane(remove_key)	
+	numcascades(remove_key)
+	shadowcascaderesolution0(remove_key)
+	shadowcascaderesolution1(remove_key)
+	shadowcascaderesolution2(remove_key)
+	shadowcascaderesolution3(remove_key)
+	shadowcascadedistance0(remove_key)
+	shadowcascadedistance1(remove_key)
+	shadowcascadedistance2(remove_key)
+	shadowcascadedistance3(remove_key)
+	cascaderenderstaticobj(remove_key)
+	cascadecrossfade(remove_key)
+	cascadedistancefade(remove_key)
 
 	// These don't really need to be exposed, defauls work fine 99% of time
+	sunlightminbrightness(remove_key) 
+	ambient_occlusion(remove_key)
+	max_occlusion_distance(remove_key)
+	fully_occluded_fraction(remove_key)
+	occlusion_exponent(remove_key)
 	// Hacks
 	minroughness(float) { group="Specular" min="0.0" max="1.0" } : "Specular Softness" : "0" : "USE WITH CAUTION: Artificially softens direct specular (not cubemaps) to simulate cheap, soft area lights. Note: Direct Lighting must be set to Stationary or Dynamic for this to have an effect."
 	
+	ambient_occlusion_proxy_override(boolean) [ group="Ambient Occlusion Proxies" ] : "Custom AO Proxies" : 0
+	ambient_occlusion_proxy_position_0(target_destination) [ group="Ambient Occlusion Proxies" ] : "Custom AO Proxy Position 0" : "0 0 0" : "Relative to origin of the light_environment."
+	ambient_occlusion_proxy_position_1(target_destination) [ group="Ambient Occlusion Proxies" ] : "Custom AO Proxy Position 1" : "0 0 0" : "Relative to origin of the light_environment."
+	ambient_occlusion_proxy_position_2(target_destination) [ group="Ambient Occlusion Proxies" ] : "Custom AO Proxy Position 2" : "0 0 0" : "Relative to origin of the light_environment."
+	ambient_occlusion_proxy_position_3(target_destination) [ group="Ambient Occlusion Proxies" ] : "Custom AO Proxy Position 3" : "0 0 0" : "Relative to origin of the light_environment."
+	ambient_occlusion_proxy_cone_angle_0(float) { group="Ambient Occlusion Proxies" min="0.01" max="1.0" } : "Custom AO Proxy Cone Softness 0" : "0.3" : "Softness of Imaginary Shadowing Light."
+	ambient_occlusion_proxy_cone_angle_1(float) { group="Ambient Occlusion Proxies" min="0.01" max="1.0" } : "Custom AO Proxy Cone Softness 1" : "0.3" : "Softness of Imaginary Shadowing Light."
+	ambient_occlusion_proxy_cone_angle_2(float) { group="Ambient Occlusion Proxies" min="0.01" max="1.0" } : "Custom AO Proxy Cone Softness 2" : "0.3" : "Softness of Imaginary Shadowing Light."
+	ambient_occlusion_proxy_cone_angle_3(float) { group="Ambient Occlusion Proxies" min="0.01" max="1.0" } : "Custom AO Proxy Cone Softness 3" : "0.3" : "Softness of Imaginary Shadowing Light."
+	ambient_occlusion_proxy_strength_0(float) { group="Ambient Occlusion Proxies" min="0.0" max="1.0" } : "Custom AO Proxy Cone Strength 0" : "0.5" : "Relative Strength of Imaginary Shadowing Light."
+	ambient_occlusion_proxy_strength_1(float) { group="Ambient Occlusion Proxies" min="0.0" max="1.0" } : "Custom AO Proxy Cone Strength 1" : "0.5" : "Relative Strength of Imaginary Shadowing Light."
+	ambient_occlusion_proxy_strength_2(float) { group="Ambient Occlusion Proxies" min="0.0" max="1.0" } : "Custom AO Proxy Cone Strength 2" : "0.5" : "Relative Strength of Imaginary Shadowing Light."
+	ambient_occlusion_proxy_strength_3(float) { group="Ambient Occlusion Proxies" min="0.0" max="1.0" } : "Custom AO Proxy Cone Strength 3" : "0.5" : "Relative Strength of Imaginary Shadowing Light."
+	ambient_occlusion_proxy_ambient_strength(float) { group="Ambient Occlusion Proxies" min="0.01" max="1.0" } : "AO Proxy Ambient Strength" : "1.0" : "Relative Strength of Ambient/Unshadowed term. Lower values make darker shadows."
 ]
 
 @OverrideClass = light_barn
 [
-	clientSideEntity(choices) [ group="Misc" ] : "Create Client-Only Entity" : 1 =
+	colormode(choices) { group="Direct Light" } : "Color Mode" : "1" : "How to calculate the light's color" =
 	[
-		0 : "No"
-		1 : "Yes"
+		"0" : "Color"
+		"1" : "Color Temperature"
 	]
-
-    castshadows(choices) [ group = "Shadows" ] : "Cast Shadows" : "2" : "Whether this light casts shadow" =
-	[
-		"0" : "No"
-		"1" : "Baked & Dynamic"
-		"2" : "Baked Only"
-	]
-	directlight(choices) { group="Direct Light" }: "Direct Lighting Type" : "1" : "How direct lighting should be represented: Static=Fully baked into lightmap (cheapest), Stationary=Dynamic direct light with baked shadows, Dynamic=Fully dynamic (Most expensive). NOTE: Stationary and Dynamic omni2's take up 6 dynamic shadow slots, and will likely not cast shadows if you have CSM shadows enabled in a light_environment." =
-
-	[
-		// Ordered by expensiveness
-		"0" : "None"
-		"1" : "Static"
-		"3" : "Stationary"
-		"2" : "Dynamic"
-	]
-	fog(remove_key)
-	fogstrength(remove_key)
-	fogshadows(remove_key)
-]
-
-@OverrideClass = light_rect
-[
 	clientSideEntity(choices) [ group="Misc" ] : "Create Client-Only Entity" : 1 =
 	[
 		0 : "No"
@@ -804,26 +899,73 @@
 		"3" : "Stationary"
 		"2" : "Dynamic"
 	]
+	// Light Source / Area Light Settings
+	luminaire_shape(choices) { group="Light Source" }: "Light Source Type" : "1" : "Point or area light shapes. Point produces sharp shadows whereas Disk and Rectangle are area lights, with shadow softness/falloff influenced by the Area Light Size/Width." =
+	[
+//		Don says "Point" is purely a LTC (realtime area lights) optimisation, but since we don't currently support LTC in CS2, I'm doing to remove the option to simplyfy and avoid confusion)
+//		"0" : "Point"
+		"1" : "Disk (Area Light)"
+		"2" : "Rectangle (Area Light)"
+	]	
 	fog(remove_key)
 	fogstrength(remove_key)
 	fogshadows(remove_key)
+	fogmixedshadows(remove_key)
 ]
 
-@OverrideClass = light_omni2
+@OverrideClass = light_rect
 [
+	colormode(choices) { group="Direct Light" } : "Color Mode" : "1" : "How to calculate the light's color" =
+	[
+		"0" : "Color"
+		"1" : "Color Temperature"
+	]
 	clientSideEntity(choices) [ group="Misc" ] : "Create Client-Only Entity" : 1 =
 	[
 		0 : "No"
 		1 : "Yes"
 	]
 
-	castshadows(choices) [ group = "Shadows" ] : "Cast Shadows" : "2" : "Whether this light casts shadow" =
+    castshadows(choices) [ group = "Shadows" ] : "Cast Shadows" : "2" : "Whether this light casts shadow" =
 	[
 		"0" : "No"
 		"1" : "Baked & Dynamic"
 		"2" : "Baked Only"
 	]
-	directlight(choices) { group="Direct Light" }: "Direct Lighting Type" : "1" : "How direct lighting should be represented: Static=Fully baked into lightmap (cheapest), Stationary=Dynamic direct light with baked shadows, Dynamic=Fully dynamic (Most expensive)" =
+	directlight(choices) { group="Direct Light" } : "Direct Lighting Type" : "1" : "How direct lighting should be represented: Static=Fully baked into lightmap (cheapest), Stationary=Dynamic direct light with baked shadows, Dynamic=Fully dynamic (Most expensive)" =
+	[
+		// Ordered by expensiveness
+		"0" : "None"
+		"1" : "Static"
+		// "3" : "Stationary"
+		// "2" : "Dynamic"
+	]
+	fog(remove_key)
+	fogstrength(remove_key)
+	fogshadows(remove_key)
+	fogmixedshadows(remove_key)
+]
+
+@OverrideClass = light_omni2
+[
+	colormode(choices) { group="Direct Light" } : "Color Mode" : "0" : "How to calculate the light's color" =
+	[
+		"0" : "Color"
+		"1" : "Color Temperature"
+	]	
+	clientSideEntity(choices) [ group="Misc" ] : "Create Client-Only Entity" : 1 =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	castshadows(choices) [ group = "Shadows" ] : "Cast Shadows" : "2" : "Whether this light casts shadow. " =
+	[
+		"0" : "No"
+		"1" : "Baked & Dynamic"
+		"2" : "Baked Only"
+	]
+	directlight(choices) { group="Direct Light" }: "Direct Lighting Type" : "1" : "How direct lighting should be represented: Static=Fully baked into lightmap (cheapest), Stationary=Dynamic direct light with baked shadows, Dynamic=Fully dynamic (Most expensive). NOTE: Stationary and Dynamic omni2's take up 6 dynamic shadow slots, and will likely not cast shadows if you have CSM shadows enabled in a light_environment." =
 	[
 		// Ordered by expensiveness
 		"0" : "None"
@@ -831,9 +973,36 @@
 		"3" : "Stationary"
 		"2" : "Dynamic"
 	]
+	// Shape
+	shape(choices) { group="Light Shape" } : "Shape" : "0" : "Shape of the light" =
+	[
+//		Don says "Point" is purely a LTC (realtime area lights) optimisation, but since we don't currently support LTC in CS2, I'm doing to remove the option to simplyfy and avoid confusion)
+//		"3" : "Point"
+		"0" : "Sphere"
+		"1" : "Tube"
+		"2" : "Tube with end caps"
+	]	
 	fog(remove_key)
 	fogstrength(remove_key)
 	fogshadows(remove_key)	
+	fogmixedshadows(remove_key)	
+]
+
+@OverrideClass = sky_camera
+[
+	clip_3D_skybox_near_to_world_far(remove_key)
+	clip_3D_skybox_near_to_world_far_offset(remove_key)
+	SkyboxSlot(remove_key)
+	fogenable(remove_key)
+	fogblend(remove_key)
+	use_angles(remove_key)
+	fogcolor(remove_key)
+	fogcolor2(remove_key)
+	fogdir(remove_key)
+	fogstart(remove_key)
+	fogend(remove_key)
+	fogmaxdensity(remove_key)
+	HDRColorScale(remove_key)
 ]
 
 @OverrideClass
@@ -1102,6 +1271,18 @@
 	filtername(filterclass) : "Filter Name" : : "Filter to use to see if activator collides with me. See filter_activator_name for more explanation. Allow means 'Allow to Block' for this entity."
 ]
 
+@FilterClass base(BaseFilter) size(-8 -8 -8, 8 8 8) = filter_activator_team :
+	"A filter that filters by the team of the activator."
+[
+	filterteam(choices) : "Filter Team Number" : 2 : "The team number to filter by.  If the filter mode is Allow, only entities whose "+
+		"team number matches the given team will pass the filter. If the filter mode is Disallow, "+
+		"all entities EXCEPT those whose team number matches the given team will pass the filter." =
+	[
+		2 : "Terrorist"
+		3 : "Counter-Terrorist"
+	]
+]
+
 
 @SolidClass base(Targetname, Parentname ) = func_bomb_target:  
 	"Bomb Target. The terrorists can place C4 explosives while standing in this zone.\n\n" +
@@ -1177,7 +1358,7 @@
 [
 	ZNear(float)[ group="Frustum" ] : "ZNear" : 4 : "Distance to the near plane for preview of the frustum in hammer."
 	ZFar(float)[ group="Frustum" ] : "ZFar" : 100 : "Distance to the far plane for preview of the frustum in hammer."
- 	rendercolor(color255)[ group="Frustum" ] : "Color (R G B)" : "128 128 128 for preview of the frustum in hammer."
+ 	rendercolor(color255)[ group="Frustum" ] : "Color (R G B)" : "128 128 128" : "Render color for preview of the frustum in hammer."
 	aspectRatio(float)[ group="Frustum" ] : "Aspect Ratio" : "1.0" : "Aspect ratio of the camera for preview of the frustum in hammer. "
 
 	FOV(float) : "Field Of View" : "90" : "This is the horizontal field of view."
@@ -1198,7 +1379,7 @@
 [
 	ZNear(float)[ group="Frustum" ] : "ZNear" : 4 : "Distance to the near plane for preview of the frustum in hammer."
 	ZFar(float)[ group="Frustum" ] : "ZFar" : 100 : "Distance to the far plane for preview of the frustum in hammer."
- 	rendercolor(color255)[ group="Frustum" ] : "Color (R G B)" : "128 128 128 for preview of the frustum in hammer."
+ 	rendercolor(color255)[ group="Frustum" ] : "Color (R G B)" : "128 128 128" : "Render color for preview of the frustum in hammer."
 	aspectRatio(float)[ group="Frustum" ] : "Aspect Ratio" : "1.0" : "Aspect ratio of the camera."
 
 	useVerticalFOV(boolean) : "Vertical FOV" : "0" : "Set to true if the camera should use vertical FOV (Default false)"
@@ -1231,9 +1412,12 @@
 	weapon_state(animgraph_enum)  { enabled={ function="ModelHasAnimGraph" } } : "Weapon State" : "" : "Weapon specific animgraph. Should be set to 'inspect' for weapon preview.  Set by game code for weapons."
 	model_scale(float)  : "Model Scale" : "" : "Initial scale for the model."
 	DefaultAnim(sequence) { enabled={ function="NotUsingAnimGraph" } } : "Default Animation" : "" : "The name of the idle animation that this prop will revert to whenever it finishes a random or forced animation. This setting is ignored for models with an animgraph when Use Animgraph is enabled."
+	reset_model_on_spawn(boolean) : "Reset Model on Spawn" : "0" : "Clear this model when the entity spawns. Used for previewing a specific model in hammer but populating the actual model based on player equipment."
+
+	input SetItem(void) : "Set the itemid for this preview."
 ]
 
-@SolidClass base(Targetname, Parentname, RenderFields) drawangles_local( movedir ) = func_conveyor : 
+@SolidClass base(Targetname, Parentname, RenderFields) drawangles_local{ angles_key = "movedir" } = func_conveyor : 
 	"A brush entity with a moving surface that moves linearly in a given direction"
 [
 	conveyor_models(target_destination) : "Models" : "" : "Name of the conveyor models that will animate along with the conveyor."
@@ -1257,6 +1441,7 @@
 			{ key = "targetMapName" value = "prefabs/misc/team_select" }
 		]
 	}
+	tags( PlayerPosition )
 	model("models/editor/team_select") 
 	= team_select : "In-map team select position." 
 [
@@ -1271,6 +1456,7 @@
 			{ key = "targetMapName" value = "prefabs/misc/terrorist_team_intro" }
 		]
 	}
+	tags( PlayerPosition )
 	model("models/editor/terrorist_team_intro") 
 	= terrorist_team_intro : "In-map terrorist team intro variant #1." 
 [
@@ -1285,6 +1471,7 @@
 			{ key = "targetMapName" value = "prefabs/misc/terrorist_team_intro_variant2" }
 		]
 	}
+	tags( PlayerPosition )
 	model("models/editor/terrorist_team_intro_variant2")
 	= terrorist_team_intro_variant2 : "In-map terrorist team intro variant #2." 
 [
@@ -1299,6 +1486,7 @@
 			{ key = "targetMapName" value = "prefabs/misc/counterterrorist_team_intro" }
 		]
 	}
+	tags( PlayerPosition )
 	model("models/editor/counterterrorist_team_intro") 
 	= counterterrorist_team_intro : "In-map counter-terrorist team intro variant #1." 
 [
@@ -1313,6 +1501,7 @@
 			{ key = "targetMapName" value = "prefabs/misc/counterterrorist_team_intro_variant2" }
 		]
 	}
+	tags( PlayerPosition )
 	model("models/editor/counterterrorist_team_intro_variant2")
 	= counterterrorist_team_intro_variant2 : "In-map counter-terrorist team intro variant #2." 
 [
@@ -1355,6 +1544,7 @@
 			{ key = "targetMapName" value = "prefabs/misc/end_of_match" }
 		]
 	}
+	tags( PlayerPosition )
 	model("models/editor/end_of_match") = end_of_match : "In-map end-of-match position." 
 [
 ]
@@ -1393,21 +1583,6 @@
 	output OnMoneySpentFail(void) : "Fires when input SpendMoneyFromPlayer failed. (Player didn't have enough money)"
 ]
 
-@FilterClass base(BaseFilter) size(-8 -8 -8, 8 8 8) = filter_activator_team :
-	"A filter that filters by the team of the activator."
+@PointClass base( Angles) studio("characters/models/shared/spawn/ctm_spawnpoint.vmdl") = point_scale_reference_human : "Scale Reference (Human)"
 [
-	filterteam(choices) : "Filter Team Number" : 2 : "The team number to filter by.  If the filter mode is Allow, only entities whose "+
-		"team number matches the given team will pass the filter. If the filter mode is Disallow, "+
-		"all entities EXCEPT those whose team number matches the given team will pass the filter." =
-	[
-		2 : "Terrorist"
-		3 : "Counter-Terrorist"
-	]
-]
-
-@PointClass base(Targetname) iconsprite("editor/point_script.vmat") = point_script : 
-	"An entity that runs TypeScript" 
-[
-	script(resource:vts)	: "Script path" : : "TypeScript file to use"
-	script_keys(string)		: "Script keys" : : "Unknown"
 ]
